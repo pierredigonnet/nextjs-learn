@@ -1,10 +1,15 @@
+import { PageLayout } from "@/components/layout";
 import { ModeToggle } from "@/components/theme-toggle";
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="font-sans py-2 flex items-center justify-center gap-10">
+    <PageLayout>
       <div className="h-fit">Learn Next</div>
+      <Link href="/formations" className="text-indigo-500 underline">
+        Fondamentals
+      </Link>
       <ModeToggle />
-    </div>
+    </PageLayout>
   );
 }
