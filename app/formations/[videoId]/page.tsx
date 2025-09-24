@@ -20,24 +20,30 @@ export default async function Page(props: {
     return <p>invalid video</p>;
   }
   return (
-    <PageLayout>
-      <Card>
-        <CardHeader>
-          <CardTitle>{video.title}</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <ul className="list-disc list-inside">
-            {video.lessons.map((lesson) => (
-              <li key={lesson.title}>{lesson.title}</li>
-            ))}
-          </ul>
-        </CardContent>
-        <CardFooter>
-          <Link href="/formations" className="text-indigo-500 hover:underline">
-            Back
-          </Link>
-        </CardFooter>
-      </Card>
-    </PageLayout>
+    <Card>
+      <CardHeader>
+        <CardTitle>{video.title}</CardTitle>
+      </CardHeader>
+      <CardContent className="flex flex-col gap-4">
+        <ul className="list-disc list-inside">
+          {video.lessons.map((lesson) => (
+            <li key={lesson.title}>
+              <span>{lesson.title} </span>
+              <Link
+                href={`/formations/${video.id}/lessons/${lesson.id}`}
+                className="text-indigo-500"
+              >
+                {`→`}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </CardContent>
+      <CardFooter>
+        <Link href="/formations" className="text-indigo-500 hover:underline">
+          Back
+        </Link>
+      </CardFooter>
+    </Card>
   );
 }
