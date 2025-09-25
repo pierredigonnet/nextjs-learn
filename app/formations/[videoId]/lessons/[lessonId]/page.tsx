@@ -16,19 +16,18 @@ export default async function Page(props: {
 }) {
   const params = await props.params;
 
-  // Debug: afficher les paramètres
-  console.log("params.videoId:", params.videoId);
-  console.log("params.lessonId:", params.lessonId);
-
   const video = VIDEOS.find((video) => video.id === params.videoId);
 
   if (!video) {
     return <p>invalid video</p>;
   }
 
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
   const lesson = video.lessons.find((lesson) => lesson.id === params.lessonId);
 
   if (!lesson) {
+    throw new Error("Invalid Lessons");
     return <p>invalid lesson</p>;
   }
 
