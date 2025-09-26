@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { PageLayout } from "@/components/layout";
-import { VIDEOS } from "../data";
+import { VIDEOS } from "../../data";
 
 // Server component
 export default async function Page(props: {
@@ -15,6 +15,9 @@ export default async function Page(props: {
 }) {
   const params = await props.params;
   const video = VIDEOS.find((video) => video.id === params.videoId);
+
+  await new Promise((resolve) => setTimeout(resolve, 5000));
+
   if (!video) {
     //TODO Changer
     return <p>invalid video</p>;
@@ -30,7 +33,7 @@ export default async function Page(props: {
             <li key={lesson.title}>
               <span>{lesson.title} </span>
               <Link
-                href={`/formations/${video.id}/lessons/${lesson.id}`}
+                href={`/formations/videos/${video.id}/lessons/${lesson.id}`}
                 className="text-indigo-500"
               >
                 {`→`}

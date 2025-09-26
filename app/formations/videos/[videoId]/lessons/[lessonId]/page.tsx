@@ -9,6 +9,7 @@ import {
 import Link from "next/link";
 import { PageLayout } from "@/components/layout";
 import { VIDEOS } from "@app/formations/data";
+import { notFound } from "next/navigation";
 
 // Server component
 export default async function Page(props: {
@@ -22,13 +23,12 @@ export default async function Page(props: {
     return <p>invalid video</p>;
   }
 
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   const lesson = video.lessons.find((lesson) => lesson.id === params.lessonId);
 
   if (!lesson) {
-    throw new Error("Invalid Lessons");
-    return <p>invalid lesson</p>;
+    notFound();
   }
 
   return (
@@ -40,7 +40,7 @@ export default async function Page(props: {
 
       <CardFooter>
         <Link
-          href={`/formations/${video.id}`}
+          href={`/formations/videos/${video.id}`}
           className="text-indigo-500 hover:underline"
         >
           Back

@@ -14,13 +14,19 @@ export default function Page() {
           return (
             <Link
               key={video.id}
-              href={`/formations/${video.id}`}
+              href={`/formations/videos/${video.id}`}
               className="text-indigo-500 underline"
             >
               {video.title}
             </Link>
           );
         })}
+        <Link
+          href={`/formations/videos/404`}
+          className="text-indigo-500 underline"
+        >
+          404
+        </Link>
       </CardContent>
     </Card>
   );
