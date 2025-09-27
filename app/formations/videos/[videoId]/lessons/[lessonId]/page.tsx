@@ -11,6 +11,18 @@ import { PageLayout } from "@/components/layout";
 import { VIDEOS } from "@app/formations/data";
 import { notFound } from "next/navigation";
 
+export async function generateStaticParams() {
+  const videos = VIDEOS;
+  const result = videos.flatMap((video) => {
+    const params = video.lessons.map((lesson) => {
+      return { videoId: video.id, lessonId: lesson.id };
+    });
+    return params;
+  });
+
+  return result;
+}
+
 // Server component
 export default async function Page(props: {
   params: Promise<{ videoId: string; lessonId: string }>;

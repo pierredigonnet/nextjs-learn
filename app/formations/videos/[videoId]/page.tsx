@@ -9,11 +9,16 @@ import Link from "next/link";
 import { PageLayout } from "@/components/layout";
 import { VIDEOS } from "../../data";
 
-// Server component
+export async function generateStaticParams() {
+  const videos = VIDEOS;
+  return videos.map((video) => ({ videoId: video.id }));
+}
+
 export default async function Page(props: {
   params: Promise<{ videoId: string }>;
 }) {
   const params = await props.params;
+
   const video = VIDEOS.find((video) => video.id === params.videoId);
 
   await new Promise((resolve) => setTimeout(resolve, 5000));
