@@ -8,19 +8,22 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { PageLayout } from "@/components/layout";
-import { VIDEOS } from "@app/formations/data";
+import { VIDEOS } from "@app/(formation-layout)/formations/data";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // Server component
-export default async function Loading() {
+export default async function NotFound() {
   return (
     <Card>
       <CardHeader>
-        <Skeleton className="w-full h-10"></Skeleton>
-        <Skeleton className="w-full h-8"></Skeleton>
+        <CardTitle>404</CardTitle>
+        <CardDescription>Video not found</CardDescription>
       </CardHeader>
       <CardFooter>
-        <Skeleton className="w-16 h-8"></Skeleton>
+        <Link href={`/formations`} className="text-indigo-500 text-sm">
+          {" "}
+          Back to formations
+        </Link>
       </CardFooter>
     </Card>
   );

@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { PageLayout } from "@/components/layout";
-import { VIDEOS } from "@app/formations/data";
+import { VIDEOS } from "@app/(formation-layout)/formations/data";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // Server component
@@ -17,7 +17,7 @@ export default async function NotFound() {
     <Card>
       <CardHeader>
         <CardTitle>404</CardTitle>
-        <CardDescription>lesson not found</CardDescription>
+        <CardDescription>Video not found...</CardDescription>
       </CardHeader>
       <CardFooter>
         <Link href={`/formations`} className="text-indigo-500 text-sm">
