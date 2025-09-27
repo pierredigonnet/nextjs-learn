@@ -2,6 +2,12 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { PageLayout } from "@/components/layout";
 import { VIDEOS } from "./data";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Plan de formation",
+  description: "meilleure formation du monde mon chou, profites-en !!",
+};
 
 export default function Page() {
   return (

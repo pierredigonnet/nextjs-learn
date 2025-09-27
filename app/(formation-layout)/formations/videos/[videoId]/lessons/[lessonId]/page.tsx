@@ -10,6 +10,7 @@ import Link from "next/link";
 import { PageLayout } from "@/components/layout";
 import { VIDEOS } from "@app/(formation-layout)/formations/data";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
 export async function generateStaticParams() {
   const videos = VIDEOS;
@@ -23,16 +24,35 @@ export async function generateStaticParams() {
   return result;
 }
 
-// Server component
-export default async function Page(props: {
+type PageProps = {
   params: Promise<{ videoId: string; lessonId: string }>;
-}) {
+};
+
+export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
+  const params = await props.params;
+  const video = VIDEOS.find((video) => video.id === params.videoId);
+
+  if (!video) {
+    return <p>invalid video</p>;
+  }
+
+  const lesson = video.lessons.find((lesson) => lesson.id === params.lessonId);
+
+  if (!lesson) {
+    notFound();
+  }
+
+  return { title: `${video.title} • ${lesson.title}` };
+};
+
+// Server component
+export default async function Page(props: PageProps) {
   const params = await props.params;
 
   const video = VIDEOS.find((video) => video.id === params.videoId);
 
   if (!video) {
-    return <p>invalid video</p>;
+    notFound();
   }
 
   await new Promise((resolve) => setTimeout(resolve, 1000));

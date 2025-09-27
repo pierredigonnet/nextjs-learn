@@ -8,15 +8,25 @@ import {
 import Link from "next/link";
 import { PageLayout } from "@/components/layout";
 import { VIDEOS } from "../../data";
+import type { Metadata } from "next";
 
 export async function generateStaticParams() {
   const videos = VIDEOS;
   return videos.map((video) => ({ videoId: video.id }));
 }
 
-export default async function Page(props: {
+type PageProps = {
   params: Promise<{ videoId: string }>;
-}) {
+};
+
+export const generateMetadata = async (props: PageProps): Promise<Metadata> => {
+  const params = await props.params;
+  const video = VIDEOS.find((video) => video.id === params.videoId);
+
+  return { title: `video : ${video?.title}` };
+};
+
+export default async function Page(props: PageProps) {
   const params = await props.params;
 
   const video = VIDEOS.find((video) => video.id === params.videoId);
