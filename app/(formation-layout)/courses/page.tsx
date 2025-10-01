@@ -5,18 +5,35 @@ import { prisma } from "@/lib/prisma";
 import { Star } from "lucide-react";
 import { SelectStar } from "./select-star";
 import { revalidatePath } from "next/cache";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Suspense } from "react";
+import { UpdateTitleForm } from "./edit-title";
 
 export default async function Page() {
   const reviews = await prisma.review.findMany();
 
   // server function
-  const setNewStar = async (reviewId: string, star: number) => {
+  const setReviewStar = async (reviewId: string, star: number) => {
     "use server";
 
     await prisma.review.update({
       where: { id: reviewId },
       data: {
         star,
+      },
+    });
+
+    revalidatePath("/courses");
+  };
+
+  // server function
+  const setReviewName = async (reviewId: string, name: string) => {
+    "use server";
+
+    await prisma.review.update({
+      where: { id: reviewId },
+      data: {
+        name,
       },
     });
 
@@ -37,16 +54,35 @@ export default async function Page() {
                   <SelectStar
                     star={review.star}
                     reviewId={review.id}
-                    setNewStar={setNewStar}
+                    setNewStar={setReviewStar}
                   />
                 </div>
-                <CardTitle>{review.name}</CardTitle>
+                <UpdateTitleForm
+                  className="text-lg font-bold"
+                  setTitle={setReviewName}
+                  reviewId={review.id}
+                >
+                  {review.name}
+                </UpdateTitleForm>
               </CardHeader>
               <CardContent>{review.review}</CardContent>
             </Card>
           ))}
         </ul>
+        <Card>
+          <CardContent>
+            <Suspense fallback={<Skeleton className="w-full h-10" />}>
+              <LongLoadingComponent />
+            </Suspense>
+          </CardContent>
+        </Card>
       </CardContent>
     </Card>
   );
 }
+
+const LongLoadingComponent = async () => {
+  const reviews = prisma.review.count();
+  await new Promise((r) => setTimeout(r, 4000));
+  return <p>{reviews}</p>;
+};

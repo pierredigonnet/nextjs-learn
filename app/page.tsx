@@ -9,6 +9,9 @@ export default function Home() {
       <Link href="/formations" className="text-indigo-500 underline">
         Fondamentals
       </Link>
+      <Link href="/courses" className="text-indigo-500 underline">
+        Courses
+      </Link>
       <ModeToggle />
     </PageLayout>
   );
