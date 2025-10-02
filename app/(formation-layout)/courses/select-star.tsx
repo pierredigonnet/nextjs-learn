@@ -7,7 +7,7 @@ import { useState } from "react";
 export const SelectStar = (props: {
   star: number;
   reviewId: string;
-  setNewStar: (reviewId: string, star: number) => void;
+  onStarChange?: (reviewId: string, star: number) => void;
 }) => {
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
 
@@ -28,7 +28,7 @@ export const SelectStar = (props: {
             }}
             key={i}
             onClick={() => {
-              props.setNewStar(props.reviewId, i + 1);
+              props.onStarChange?.(props.reviewId, i + 1);
             }}
           >
             <Star

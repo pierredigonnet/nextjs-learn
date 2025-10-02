@@ -83,6 +83,6 @@ export default async function Page() {
 
 const LongLoadingComponent = async () => {
   const reviews = prisma.review.count();
-  await new Promise((r) => setTimeout(r, 4000));
+  await new Promise((r) => setTimeout(r, 1000));
   return <p>{reviews}</p>;
 };

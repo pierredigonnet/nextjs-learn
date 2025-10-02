@@ -8,7 +8,7 @@ import { title } from "process";
 export const UpdateTitleForm = (props: {
   reviewId: string;
   children: string;
-  setTitle: (reviewId: string, newTitle: string) => void;
+  setTitle?: (reviewId: string, newTitle: string) => void;
   className?: string;
 }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -23,7 +23,7 @@ export const UpdateTitleForm = (props: {
   const submit = () => {
     setIsEditing(false);
     const newTitle = ref.current?.value ?? "";
-    props.setTitle(props.reviewId, newTitle);
+    props.setTitle?.(props.reviewId, newTitle);
     startTransition(() => {
       setTitle(newTitle);
     });
