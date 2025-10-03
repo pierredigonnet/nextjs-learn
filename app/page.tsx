@@ -5,23 +5,38 @@ import Link from "next/link";
 import { SelectStar } from "./(formation-layout)/courses/select-star";
 import { UpdateTitleForm } from "./(formation-layout)/courses/edit-title";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { revalidatePath } from "next/cache";
 import { Trash } from "lucide-react";
+import { ReviewForm } from "./review-form";
 
 export default async function Home() {
   const reviews = await prisma.review.findMany();
 
   const changeStar = async (reviewId: string, star: number) => {
     "use server";
+
+    await new Promise((r) => setTimeout(r, 2000));
+
     await prisma.review.update({
       where: {
         id: reviewId,
       },
       data: { star: star },
+    });
+    revalidatePath("/");
+  };
+
+  const changeName = async (reviewId: string, name: string) => {
+    "use server";
+
+    await new Promise((r) => setTimeout(r, 2000));
+
+    await prisma.review.update({
+      where: {
+        id: reviewId,
+      },
+      data: { name: name },
     });
     revalidatePath("/");
   };
@@ -39,38 +54,7 @@ export default async function Home() {
         <ModeToggle />
       </div>
       <Card className="px-4">
-        <form
-          action={async (formData) => {
-            // ‼️‼️‼️‼️‼️
-            "use server";
-            const name = formData.get("name") as string;
-            const review = formData.get("review") as string;
-
-            console.log({ name, review });
-
-            await prisma.review.create({
-              data: {
-                name,
-                review,
-                star: 5,
-              },
-            });
-            revalidatePath("/");
-          }}
-          className="flex flex-col gap-4"
-        >
-          <div className="space-y-2">
-            <Label htmlFor="name">Nom</Label>
-            <Input type="texte" name="name" id="name" />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="review">Review</Label>
-            <Textarea name="review" id="review" />
-          </div>
-          <Button type="submit" className="cursor-pointer">
-            submit
-          </Button>
-        </form>
+        <ReviewForm />
       </Card>
       <div className="flex flex-col gap-4">
         {reviews.map((review) => (
@@ -101,6 +85,7 @@ export default async function Home() {
                 />
               </div>
               <UpdateTitleForm
+                onTitleChange={changeName}
                 className="text-lg font-bold"
                 reviewId={review.id}
               >
