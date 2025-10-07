@@ -10,17 +10,30 @@ import { useFormStatus } from "react-dom";
 import { ComponentProps } from "react";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
+import { json } from "zod";
+import { useRouter } from "next/navigation";
 
 export const ReviewForm = () => {
   const { executeAsync, hasErrored, result, hasSucceeded } =
     useAction(addReviewSafeAction);
+
+  const router = useRouter();
+
+  const updateReview = async (obj: { name: string; review: string }) => {
+    await fetch("api/reviews", {
+      method: "POST",
+      body: JSON.stringify(obj),
+    }).then((res) => res.json());
+
+    router.refresh();
+  };
 
   return (
     <form
       action={async (formData) => {
         const name = formData.get("name") as string;
         const review = formData.get("review") as string;
-        await executeAsync({ name, review });
+        await updateReview({ name, review });
         toast.success("review created !");
       }}
       className="flex flex-col gap-4"
