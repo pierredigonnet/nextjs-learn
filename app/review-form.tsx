@@ -1,61 +1,86 @@
 "use client";
 
+import { ComponentProps } from "react";
+import { useRouter } from "next/navigation";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { ReviewFormSchema } from "./review.schema";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormDescription,
+  FormMessage,
+} from "@/components/ui/form";
 import { AddReviewAction, addReviewSafeAction } from "./review.action";
+import { useAction } from "next-safe-action/hooks";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import { ComponentProps } from "react";
-import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
-import { json } from "zod";
-import { useRouter } from "next/navigation";
 
 export const ReviewForm = () => {
-  const { executeAsync, hasErrored, result, hasSucceeded } =
-    useAction(addReviewSafeAction);
+  const { executeAsync } = useAction(addReviewSafeAction);
+
+  const form = useForm<z.infer<typeof ReviewFormSchema>>({
+    resolver: zodResolver(ReviewFormSchema),
+    defaultValues: {
+      name: "",
+      review: "",
+    },
+  });
 
   const router = useRouter();
 
-  const updateReview = async (obj: { name: string; review: string }) => {
-    await fetch("api/reviews", {
-      method: "POST",
-      body: JSON.stringify(obj),
-    }).then((res) => res.json());
-
+  async function onSubmit(values: z.infer<typeof ReviewFormSchema>) {
+    await executeAsync(values);
     router.refresh();
-  };
+    form.reset();
+  }
 
   return (
-    <form
-      action={async (formData) => {
-        const name = formData.get("name") as string;
-        const review = formData.get("review") as string;
-        await updateReview({ name, review });
-        toast.success("review created !");
-      }}
-      className="flex flex-col gap-4"
-    >
-      <div className="space-y-2">
-        <Label htmlFor="name">Nom</Label>
-        <Input type="text" name="name" id="name" />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="review">Review</Label>
-        <Textarea name="review" id="review" />
-      </div>
-      <SubmitButton type="submit" className="cursor-pointer">
-        submit
-      </SubmitButton>
-      {hasErrored ? <p className="text-red-500">{result.serverError}</p> : null}
-      {hasSucceeded ? (
-        <p className="text-green-500">
-          Review created with id : {result.data?.id}
-        </p>
-      ) : null}
-    </form>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col gap-6"
+      >
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder="shadcn" {...field} />
+              </FormControl>
+              <FormDescription>The public name for the review</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="review"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Textarea placeholder="shadcn" {...field} />
+              </FormControl>
+              <FormDescription>Be honest</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <SubmitButton type="submit">Submit</SubmitButton>
+      </form>
+    </Form>
   );
 };
 
