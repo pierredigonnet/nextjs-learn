@@ -36,10 +36,10 @@ export const AuthButton = async () => {
   if (!user) {
     return (
       <Link
-        href="/auth/signup"
+        href="/auth/signin"
         className={buttonVariants({ size: "sm", variant: "outline" })}
       >
-        Sign Up !
+        Signin
       </Link>
     );
   }
