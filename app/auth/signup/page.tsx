@@ -13,7 +13,7 @@ export default function SignupPage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Sign up</CardTitle>
+        <CardTitle>Sign Up</CardTitle>
       </CardHeader>
       <CardContent>
         <SignUpForm />

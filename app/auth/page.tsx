@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { unauthorized } from "next/navigation";
+import { Check, X } from "lucide-react";
 
 export default async function AuthPage() {
   const user = await getUser();
@@ -26,11 +27,17 @@ export default async function AuthPage() {
             <span className="text-sm text-muted-foreground">Name</span>
             <span>{user?.name}</span>
           </div>
-          <div className="grid gap-2">
-            <div className="flex flex-col">
+          <div className="flex flex-col">
+            <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground">Email</span>
-              <span>{user?.email}</span>
+
+              {user.emailVerified ? (
+                <Check className="size-3" />
+              ) : (
+                <X className="size-3" />
+              )}
             </div>
+            <span>{user?.email}</span>
           </div>
         </div>
       </CardContent>

@@ -15,20 +15,19 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { signUp } from "@/lib/auth-client";
+import { signIn, signUp } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
-const SignUpFormSchema = z.object({
-  name: z.string(),
+const SignInFormSchema = z.object({
   email: z.string().email(),
   password: z.string(),
 });
 
-export function SignUpForm() {
-  const form = useForm<z.infer<typeof SignUpFormSchema>>({
-    resolver: zodResolver(SignUpFormSchema),
+export function SignInForm() {
+  const form = useForm<z.infer<typeof SignInFormSchema>>({
+    resolver: zodResolver(SignInFormSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -39,19 +38,19 @@ export function SignUpForm() {
   const router = useRouter();
 
   // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof SignUpFormSchema>) {
+  async function onSubmit(values: z.infer<typeof SignInFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
-    signUp.email(
+    signIn.email(
       {
         email: values.email,
-        name: values.name,
         password: values.password,
       },
       {
         onSuccess: () => {
           router.push("/auth");
+          router.refresh();
         },
         onError: (error) => {
           toast.error(error.error.message);
@@ -65,19 +64,6 @@ export function SignUpForm() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-6"
       >
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder="name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <FormField
           control={form.control}
           name="email"

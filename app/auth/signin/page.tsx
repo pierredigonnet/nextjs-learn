@@ -6,17 +6,17 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { SignUpForm } from "./signup-form";
+import { SignInForm } from "./signin-form";
 import Link from "next/link";
 
 export default function SignupPage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Sign up</CardTitle>
+        <CardTitle>Sign In</CardTitle>
       </CardHeader>
       <CardContent>
-        <SignUpForm />
+        <SignInForm />
       </CardContent>
       <CardFooter>
         <p className="text-sm text-muted-foreground">

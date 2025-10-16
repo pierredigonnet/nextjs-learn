@@ -12,11 +12,12 @@ import {
 import { Button } from "./ui/button";
 import { Suspense } from "react";
 import { LogOut } from "lucide-react";
-import { Avatar, AvatarFallback } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Skeleton } from "./ui/skeleton";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
+import { User2 } from "lucide-react";
 
 export const Header = () => {
   return (
@@ -49,12 +50,19 @@ export const AuthButton = async () => {
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm">
           <Avatar className="size-6">
+            {user.image ? <AvatarImage src={user.image} /> : null}
             <AvatarFallback>{user.email[0].toUpperCase()}</AvatarFallback>
           </Avatar>
           <p>{user.name}</p>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
+        <DropdownMenuItem asChild>
+          <Link href="auth" className="flex items-center gap-2 ">
+            <User2 className="size-3" />
+            Account
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <form>
             <button
@@ -69,7 +77,7 @@ export const AuthButton = async () => {
                 redirect("/auth/signin");
               }}
             >
-              <LogOut className="size-4 mr-2" />
+              <LogOut className="size-4" />
               Logout
             </button>
           </form>
