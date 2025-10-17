@@ -15,40 +15,37 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { signUp } from "@/lib/auth-client";
+import { authClient, signIn, signUp } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
-const SignUpFormSchema = z.object({
+const AccountFormSchema = z.object({
   name: z.string(),
-  email: z.string().email(),
-  password: z.string(),
+  image: z.string().nullable().optional(),
 });
 
-export function SignUpForm() {
-  const form = useForm<z.infer<typeof SignUpFormSchema>>({
-    resolver: zodResolver(SignUpFormSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-    },
+export function AccountForm(props: {
+  defaultValues: typeof z.infer<AccountFormSchema>;
+}) {
+  const form = useForm<z.infer<typeof AccountFormSchema>>({
+    resolver: zodResolver(AccountFormSchema),
+    defaultValues: props.defaultValues,
   });
 
   const router = useRouter();
 
   // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof SignUpFormSchema>) {
-    await signUp.email(
+  async function onSubmit(values: z.infer<typeof AccountFormSchema>) {
+    await authClient.updateUser(
       {
-        email: values.email,
         name: values.name,
-        password: values.password,
+        image: values.image,
       },
       {
         onSuccess: () => {
           router.push("/auth");
+          router.refresh();
         },
         onError: (error) => {
           toast.error(error.error.message);
@@ -77,25 +74,16 @@ export function SignUpForm() {
         />
         <FormField
           control={form.control}
-          name="email"
+          name="image"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Image URL</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="email" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input type="password" placeholder="password" {...field} />
+                <Input
+                  placeholder="image url"
+                  {...field}
+                  value={field.value ?? ""}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>

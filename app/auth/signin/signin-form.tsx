@@ -19,6 +19,7 @@ import { signIn, signUp } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
+import Link from "next/link";
 
 const SignInFormSchema = z.object({
   email: z.string().email(),
@@ -41,8 +42,8 @@ export function SignInForm() {
   async function onSubmit(values: z.infer<typeof SignInFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
-    signIn.email(
+
+    await signIn.email(
       {
         email: values.email,
         password: values.password,
@@ -82,7 +83,15 @@ export function SignInForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <div className="flex items-center gap-2">
+                <FormLabel>Password</FormLabel>
+                <Link
+                  href="/auth/forget-password"
+                  className="text-outline text-sm"
+                >
+                  Forget password ?
+                </Link>
+              </div>
               <FormControl>
                 <Input type="password" placeholder="password" {...field} />
               </FormControl>

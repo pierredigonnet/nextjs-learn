@@ -58,7 +58,7 @@ export const AuthButton = async () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem asChild>
-          <Link href="auth" className="flex items-center gap-2 ">
+          <Link href="/auth" className="flex items-center gap-2 ">
             <User2 className="size-3" />
             Account
           </Link>
