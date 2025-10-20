@@ -9,35 +9,40 @@ import { Button } from "@/components/ui/button";
 import { revalidatePath } from "next/cache";
 import { Trash } from "lucide-react";
 import { ReviewForm } from "./review-form";
+import { updateReviewAction, deleteReviewAction } from "./review.action";
+import { getUser } from "@/lib/auth-server";
 
 export default async function Home() {
-  const reviews = await prisma.review.findMany();
+  const user = await getUser();
+  const reviews = await prisma.review.findMany({
+    where: {
+      userId: user.id,
+    },
+  });
 
   const changeStar = async (reviewId: string, star: number) => {
     "use server";
 
-    await new Promise((r) => setTimeout(r, 2000));
+    await new Promise((r) => setTimeout(r, 1000));
 
-    await prisma.review.update({
-      where: {
-        id: reviewId,
-      },
-      data: { star: star },
+    await updateReviewAction({
+      reviewId,
+      star,
     });
+
     revalidatePath("/");
   };
 
   const changeName = async (reviewId: string, name: string) => {
     "use server";
 
-    await new Promise((r) => setTimeout(r, 2000));
+    await new Promise((r) => setTimeout(r, 1000));
 
-    await prisma.review.update({
-      where: {
-        id: reviewId,
-      },
-      data: { name: name },
+    await updateReviewAction({
+      reviewId,
+      name,
     });
+
     revalidatePath("/");
   };
 
@@ -65,7 +70,7 @@ export default async function Home() {
                   formAction={async () => {
                     "use server";
 
-                    await prisma.review.delete({ where: { id: review.id } });
+                    await deleteReviewAction({ reviewId: review.id });
                     revalidatePath("/");
                   }}
                   className="cursor-pointer"
