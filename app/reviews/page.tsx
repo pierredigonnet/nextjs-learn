@@ -12,6 +12,7 @@ import { ReviewForm } from "./review-form";
 import { updateReviewAction, deleteReviewAction } from "./review.action";
 import { getUser } from "@/lib/auth-server";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 
 export default async function Home() {
   const user = await getUser();
@@ -49,6 +50,17 @@ export default async function Home() {
 
   return (
     <PageLayout>
+      <div className="flex gap-3 items-center mb-2">
+        <div className="h-fit">Learn Next</div>
+        <Link href="/formations" className="text-indigo-500 underline">
+          Fondamentals
+        </Link>
+        <Link href="/courses" className="text-indigo-500 underline">
+          Courses
+        </Link>
+        <ModeToggle />
+      </div>
+
       <Card>
         <CardHeader>
           <CardTitle>Share Review Link</CardTitle>
@@ -59,16 +71,7 @@ export default async function Home() {
           />
         </CardContent>
       </Card>
-      <div className="flex gap-3 items-center mb-4">
-        <div className="h-fit">Learn Next</div>
-        <Link href="/formations" className="text-indigo-500 underline">
-          Fondamentals
-        </Link>
-        <Link href="/courses" className="text-indigo-500 underline">
-          Courses
-        </Link>
-        <ModeToggle />
-      </div>
+      <Separator />
       <div className="flex flex-col gap-4">
         {reviews.map((review) => (
           <Card key={review.id} className="relative">
