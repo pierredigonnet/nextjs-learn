@@ -25,7 +25,7 @@ import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
 
-export const ReviewForm = () => {
+export const ReviewForm = (props: { userId: string }) => {
   const { executeAsync } = useAction(addReviewSafeAction);
 
   const form = useForm<z.infer<typeof ReviewFormSchema>>({
@@ -39,7 +39,7 @@ export const ReviewForm = () => {
   const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof ReviewFormSchema>) {
-    await executeAsync(values);
+    await executeAsync({ ...values, userId: props.userId });
     router.refresh();
     form.reset();
   }

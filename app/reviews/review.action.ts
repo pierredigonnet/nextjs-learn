@@ -6,9 +6,9 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { ReviewFormSchema } from "./review.schema";
 
-export const addReviewSafeAction = actionUser
-  .schema(ReviewFormSchema)
-  .action(async ({ parsedInput: input, ctx }) => {
+export const addReviewSafeAction = actionClient
+  .schema(ReviewFormSchema.extend({ userId: z.string() }))
+  .action(async ({ parsedInput: input }) => {
     if (input.name === "Méchant") {
       throw new SafeError("Invalid Name");
     }
@@ -18,7 +18,7 @@ export const addReviewSafeAction = actionUser
         name: input.name,
         review: input.review,
         star: 5,
-        userId: ctx.user.id,
+        userId: input.userId,
       },
     });
 

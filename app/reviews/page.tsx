@@ -11,6 +11,7 @@ import { Trash } from "lucide-react";
 import { ReviewForm } from "./review-form";
 import { updateReviewAction, deleteReviewAction } from "./review.action";
 import { getUser } from "@/lib/auth-server";
+import { Input } from "@/components/ui/input";
 
 export default async function Home() {
   const user = await getUser();
@@ -48,6 +49,16 @@ export default async function Home() {
 
   return (
     <PageLayout>
+      <Card>
+        <CardHeader>
+          <CardTitle>Share Review Link</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Input
+            defaultValue={`http://localhost:3000/post-review/${user?.id}`}
+          />
+        </CardContent>
+      </Card>
       <div className="flex gap-3 items-center mb-4">
         <div className="h-fit">Learn Next</div>
         <Link href="/formations" className="text-indigo-500 underline">
@@ -58,9 +69,6 @@ export default async function Home() {
         </Link>
         <ModeToggle />
       </div>
-      <Card className="px-4">
-        <ReviewForm />
-      </Card>
       <div className="flex flex-col gap-4">
         {reviews.map((review) => (
           <Card key={review.id} className="relative">
@@ -101,6 +109,9 @@ export default async function Home() {
           </Card>
         ))}
       </div>
+      <Card className="px-4">
+        <ReviewForm userId={user?.id ?? ""} />
+      </Card>
     </PageLayout>
   );
 }
