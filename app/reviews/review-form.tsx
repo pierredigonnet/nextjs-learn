@@ -25,7 +25,7 @@ import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
 
-export const ReviewForm = (props: { userId: string }) => {
+export const ReviewForm = (props: { userId: string; redirectUrl?: string }) => {
   const { executeAsync } = useAction(addReviewSafeAction);
 
   const form = useForm<z.infer<typeof ReviewFormSchema>>({
@@ -40,7 +40,7 @@ export const ReviewForm = (props: { userId: string }) => {
 
   async function onSubmit(values: z.infer<typeof ReviewFormSchema>) {
     await executeAsync({ ...values, userId: props.userId });
-    router.refresh();
+    props.redirectUrl ? router.push(props.redirectUrl) : router.refresh();
     form.reset();
   }
 

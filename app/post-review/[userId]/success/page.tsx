@@ -26,10 +26,7 @@ export default async function RoutePage(props: {
         <p>{user.name}</p>
       </Button>
       <Card className="px-4">
-        <ReviewForm
-          userId={user.id}
-          redirectUrl={`/post-review/${user.id}/success`}
-        />
+        <h1>Thanks you for your review</h1>
       </Card>
     </PageLayout>
   );
