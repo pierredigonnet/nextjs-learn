@@ -28,19 +28,26 @@ model Review {
 }
 
 model User {
-  id            String    @id
-  name          String
-  email         String
-  emailVerified Boolean   @default(false)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now()) @updatedAt
-  sessions      Session[]
-  accounts      Account[]
-  reviews       Review[]
+  id              String    @id
+  name            String
+  email           String
+  emailVerified   Boolean   @default(false)
+  image           String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @default(now()) @updatedAt
+  sessions        Session[]
+  accounts        Account[]
+  reviews         Review[]
+  plan            UserPlan  @default(FREE)
+  stripeCustomerId String?
 
   @@unique([email])
   @@map("user")
+}
+
+enum UserPlan {
+  FREE
+  PRO
 }
 
 // retourver l'utilisateur quand refresh

@@ -7,20 +7,29 @@ import { UpdateTitleForm } from "@app/(formation-layout)/courses/edit-title";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { revalidatePath } from "next/cache";
-import { Trash } from "lucide-react";
+import { Banknote, Trash } from "lucide-react";
 import { ReviewForm } from "./review-form";
 import { updateReviewAction, deleteReviewAction } from "./review.action";
 import { getUser } from "@/lib/auth-server";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { unauthorized } from "next/navigation";
+import { Alert, AlertTitle } from "@/components/ui/alert";
 
 export default async function Home() {
   const user = await getUser();
+
+  if (!user) {
+    unauthorized();
+  }
+
   const reviews = await prisma.review.findMany({
     where: {
       userId: user.id,
     },
   });
+
+  const isOffLimit = reviews.length > user.limit.reviewLimit;
 
   const changeStar = async (reviewId: string, star: number) => {
     "use server";
@@ -66,9 +75,19 @@ export default async function Home() {
           <CardTitle>Share Review Link</CardTitle>
         </CardHeader>
         <CardContent>
-          <Input
-            defaultValue={`http://localhost:3000/post-review/${user?.id}`}
-          />
+          {isOffLimit ? (
+            <Alert>
+              <Banknote />
+              <AlertTitle>
+                Your user limit of {user.limit.reviewLimit} has been reached
+              </AlertTitle>
+              <Link href="/auth/upgrade">Upgrade</Link>
+            </Alert>
+          ) : (
+            <Input
+              defaultValue={`http://localhost:3000/post-review/${user?.id}`}
+            />
+          )}
         </CardContent>
       </Card>
       <Separator />

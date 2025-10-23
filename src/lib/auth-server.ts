@@ -1,5 +1,7 @@
 import { auth } from "./auth"; // path to your Better Auth server instance
 import { headers } from "next/headers";
+import { LIMITATIONS } from "./auth-plan";
+import type { UserPlan } from "@/generated/prisma";
 
 export const getSession = async () => {
   const session = await auth.api.getSession({
@@ -10,5 +12,12 @@ export const getSession = async () => {
 
 export const getUser = async () => {
   const session = await getSession();
-  return session?.user;
+  const user = session?.user;
+
+  if (!user) {
+    return undefined;
+  }
+
+  const limit = LIMITATIONS[user.plan as UserPlan];
+  return { ...user, limit };
 };
