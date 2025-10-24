@@ -26,8 +26,7 @@ import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
 
 export const ReviewForm = (props: { userId: string; redirectUrl?: string }) => {
-  const { executeAsync } = useAction(addReviewSafeAction);
-
+  // Define form with validation and empty defaults
   const form = useForm<z.infer<typeof ReviewFormSchema>>({
     resolver: zodResolver(ReviewFormSchema),
     defaultValues: {
@@ -38,10 +37,20 @@ export const ReviewForm = (props: { userId: string; redirectUrl?: string }) => {
 
   const router = useRouter();
 
+  // Execute the safe action to add a review
+  const { execute, isPending } = useAction(addReviewSafeAction, {
+    onError: (error) => {
+      toast.error(error.error.serverError ?? "Impossible to add more review !");
+    },
+    onSuccess: () => {
+      props.redirectUrl ? router.push(props.redirectUrl) : router.refresh();
+      form.reset();
+    },
+  });
+
+  // Submit form values along with userId to execute the review creation
   async function onSubmit(values: z.infer<typeof ReviewFormSchema>) {
-    await executeAsync({ ...values, userId: props.userId });
-    props.redirectUrl ? router.push(props.redirectUrl) : router.refresh();
-    form.reset();
+    await execute({ ...values, userId: props.userId });
   }
 
   return (
@@ -78,13 +87,10 @@ export const ReviewForm = (props: { userId: string; redirectUrl?: string }) => {
             </FormItem>
           )}
         />
-        <SubmitButton type="submit">Submit</SubmitButton>
+        <Button type="submit" disabled={isPending}>
+          Submit
+        </Button>
       </form>
     </Form>
   );
-};
-
-const SubmitButton = (props: ComponentProps<typeof Button>) => {
-  const { pending } = useFormStatus();
-  return <Button {...props} disabled={props.disabled || pending} />;
 };

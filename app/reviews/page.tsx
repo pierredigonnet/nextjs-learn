@@ -5,7 +5,7 @@ import Link from "next/link";
 import { SelectStar } from "@app/(formation-layout)/courses/select-star";
 import { UpdateTitleForm } from "@app/(formation-layout)/courses/edit-title";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { revalidatePath } from "next/cache";
 import { Banknote, Trash } from "lucide-react";
 import { ReviewForm } from "./review-form";
@@ -29,7 +29,7 @@ export default async function Home() {
     },
   });
 
-  const isOffLimit = reviews.length > user.limit.reviewLimit;
+  const isOffLimit = reviews.length >= user.limit.reviewLimit;
 
   const changeStar = async (reviewId: string, star: number) => {
     "use server";
@@ -78,10 +78,17 @@ export default async function Home() {
           {isOffLimit ? (
             <Alert>
               <Banknote />
-              <AlertTitle>
-                Your user limit of {user.limit.reviewLimit} has been reached
-              </AlertTitle>
-              <Link href="/auth/upgrade">Upgrade</Link>
+              <div className="flex flex-col gap-4">
+                <AlertTitle>
+                  Your user limit of {user.limit.reviewLimit} has been reached
+                </AlertTitle>
+                <Link
+                  className={buttonVariants({ size: "sm" })}
+                  href="/auth/plan"
+                >
+                  Upgrade
+                </Link>
+              </div>
             </Alert>
           ) : (
             <Input
