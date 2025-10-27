@@ -40,6 +40,10 @@ export const auth = betterAuth({
         type: "string",
         nullable: true,
       },
+      stripeCustomerId: {
+        type: "string",
+        nullable: true,
+      },
     },
   },
   emailAndPassword: {

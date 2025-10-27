@@ -7,10 +7,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { unauthorized } from "next/navigation";
+import { redirect, unauthorized } from "next/navigation";
 import { Check, X, Edit } from "lucide-react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { SubmitButton } from "./submit-button";
+import { stripe } from "@/lib/stripe";
+import { getServerUrl } from "@/lib/server-url";
+import { UserPlan } from "@/generated/prisma";
 
 export default async function AuthPage() {
   const user = await getUser();
@@ -50,7 +53,6 @@ export default async function AuthPage() {
             </div>
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader>
             <CardTitle>Premium Plan</CardTitle>
@@ -66,7 +68,36 @@ export default async function AuthPage() {
                 </div>
               ) : (
                 <form>
-                  <Button>Upgrade Now</Button>
+                  <SubmitButton
+                    formAction={async () => {
+                      "use server";
+                      const stripeCheckout =
+                        await stripe.checkout.sessions.create({
+                          mode: "payment",
+                          payment_method_types: ["card"],
+                          line_items: [
+                            {
+                              price: process.env.STRIPE_PRO_PRICE_ID,
+                              quantity: 1,
+                            },
+                          ],
+                          metadata: {
+                            plan: UserPlan.PRO,
+                          },
+                          success_url: `${getServerUrl()}/auth/plan?success=true`,
+                          cancel_url: `${getServerUrl()}/auth/plan?canceled=true`,
+                          customer: user.stripeCustomerId,
+                        });
+
+                      if (!stripeCheckout.url) {
+                        throw new Error("Oh, not possible");
+                      }
+
+                      redirect(stripeCheckout.url);
+                    }}
+                  >
+                    Upgrade Now
+                  </SubmitButton>
                 </form>
               )}
             </div>
