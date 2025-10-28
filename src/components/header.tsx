@@ -11,13 +11,14 @@ import {
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { Suspense } from "react";
-import { LogOut } from "lucide-react";
+import { LogOut, Star } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Skeleton } from "./ui/skeleton";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { User2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export const Header = () => {
   return (
@@ -48,12 +49,20 @@ export const AuthButton = async () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button
+          variant="outline"
+          size="sm"
+          className={cn({
+            "bg-linear-to-r/increasing from-indigo-500 to-teal-400 border-0":
+              user.plan === "PRO",
+          })}
+        >
           <Avatar className="size-6">
             {user.image ? <AvatarImage src={user.image} /> : null}
             <AvatarFallback>{user.email[0].toUpperCase()}</AvatarFallback>
           </Avatar>
           <p>{user.name}</p>
+          {user.plan === "PRO" ? <Star size={15} /> : null}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
