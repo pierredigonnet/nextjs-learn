@@ -1,4 +1,3 @@
-import { PageLayout } from "@/components/layout";
 import { getUser } from "@/lib/auth-server";
 import {
   Card,

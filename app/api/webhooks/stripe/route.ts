@@ -1,7 +1,6 @@
 import type { UserPlan } from "@/generated/prisma";
 import { prisma } from "@/lib/prisma";
 import { stripe } from "@/lib/stripe";
-import type { ok } from "assert";
 import { headers } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 import type Stripe from "stripe";
@@ -23,7 +22,7 @@ export const POST = async (request: NextRequest) => {
       sig,
       process.env.STRIPE_WEBHOOK_SECRET ?? ""
     );
-  } catch (err) {
+  } catch (_) {
     return NextResponse.json({ error: "Osef" }, { status: 400 });
   }
 

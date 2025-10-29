@@ -1,14 +1,6 @@
 "use client";
 
-import { PageLayout } from "@/components/layout";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import Link from "next/link";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -43,7 +35,7 @@ export default function SignupPage() {
       <CardHeader>
         <CardTitle>Reset Password</CardTitle>
         <CardDescription>
-          Enter your email address and we'll send you a link to reset your
+          Enter your email address and we&apos;ll send you a link to reset your
           password.
         </CardDescription>
       </CardHeader>

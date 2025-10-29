@@ -8,16 +8,14 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { authClient, signIn, signUp } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 
 const AccountFormSchema = z.object({

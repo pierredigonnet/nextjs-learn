@@ -1,6 +1,6 @@
 import { AccountForm } from "./account-form";
 import { getUser } from "@/lib/auth-server";
-import { redirect, unauthorized } from "next/navigation";
+import { unauthorized } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 export default async function EditPage() {
