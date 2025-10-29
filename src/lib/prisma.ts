@@ -7,11 +7,11 @@ const globalForPrisma = global as unknown as { prisma: PrismaClient };
 const getPrisma = () => {
   const client = new PrismaClient();
 
-  if (process.env.NODE_ENV === "development") {
-    return client;
+  if (process.env.DATABASE_URL?.startsWith("prisma+postgres")) {
+    return client.$extends(withAccelerate());
   }
 
-  return client.$extends(withAccelerate());
+  return client;
 };
 
 export const prisma = globalForPrisma.prisma || getPrisma();
