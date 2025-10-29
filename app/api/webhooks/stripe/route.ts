@@ -22,7 +22,7 @@ export const POST = async (request: NextRequest) => {
       sig,
       process.env.STRIPE_WEBHOOK_SECRET ?? ""
     );
-  } catch (_) {
+  } catch {
     return NextResponse.json({ error: "Osef" }, { status: 400 });
   }
 

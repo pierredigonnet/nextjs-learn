@@ -1,11 +1,5 @@
 import { getUser } from "@/lib/auth-server";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { unauthorized } from "next/navigation";
 import { Check, X, Edit } from "lucide-react";
 import Link from "next/link";
