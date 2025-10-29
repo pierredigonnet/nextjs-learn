@@ -26,7 +26,7 @@ const AccountFormSchema = z.object({
 });
 
 export function AccountForm(props: {
-  defaultValues: typeof z.infer<AccountFormSchema>;
+  defaultValues: z.infer<typeof AccountFormSchema>;
 }) {
   const form = useForm<z.infer<typeof AccountFormSchema>>({
     resolver: zodResolver(AccountFormSchema),

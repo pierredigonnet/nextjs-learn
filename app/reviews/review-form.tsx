@@ -19,7 +19,7 @@ import {
   FormDescription,
   FormMessage,
 } from "@/components/ui/form";
-import { AddReviewAction, addReviewSafeAction } from "./review.action";
+import { addReviewSafeAction } from "./review.action";
 import { useAction } from "next-safe-action/hooks";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";

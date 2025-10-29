@@ -4,6 +4,7 @@ import { stripe } from "@/lib/stripe";
 import type { ok } from "assert";
 import { headers } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
+import type Stripe from "stripe";
 
 export const POST = async (request: NextRequest) => {
   const headerList = await headers();
@@ -28,11 +29,11 @@ export const POST = async (request: NextRequest) => {
 
   switch (event.type) {
     case "checkout.session.completed":
-      const object = event.data.object;
+      const object = event.data.object as Stripe.Checkout.Session;
       const customerId =
         typeof object.customer === "string"
           ? object.customer
-          : object.customer.id;
+          : object.customer?.id;
 
       const PLAN = object.metadata?.plan;
 

@@ -8,17 +8,17 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-
 import Link from "next/link";
-
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { CardDescription } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
+import { useRouter } from "next/router";
 
 export default function SignupPage() {
+  const router = useRouter();
   async function onSubmit(formData: FormData) {
     const email = formData.get("email");
     await authClient.forgetPassword(
@@ -29,7 +29,6 @@ export default function SignupPage() {
       {
         onSuccess: () => {
           router.push("/auth");
-          router.refresh();
         },
         onError: (error) => {
           toast.error(error.error.message);

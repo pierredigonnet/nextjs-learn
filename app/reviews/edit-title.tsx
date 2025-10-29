@@ -36,7 +36,6 @@ export const UpdateTitleForm = (props: {
           ref={ref}
           className={cn(props.className)}
           defaultValue={props.children}
-          style={{ fieldSizing: "content" }}
           onKeyDown={(event) => {
             if (event.key === "Enter") {
               submit();

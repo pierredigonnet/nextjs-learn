@@ -2,6 +2,7 @@ import { betterAuth, email } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 // If your Prisma file is located elsewhere, you can change the path
 import { prisma } from "./prisma";
+import { stripe } from "./stripe";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
