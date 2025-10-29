@@ -15,10 +15,11 @@ import { Input } from "@/components/ui/input";
 import { CardDescription } from "@/components/ui/card";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "sonner";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
   const router = useRouter();
+
   async function onSubmit(formData: FormData) {
     const email = formData.get("email");
     await authClient.forgetPassword(
